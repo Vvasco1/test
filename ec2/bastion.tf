@@ -2,7 +2,7 @@ data "terraform_remote_state" "network" {
 	backend = "remote"
 	config = {
 		organization = "vvasco_test"
-		workspace = {
+		workspaces = {
 			name = "network"
 		}
 	}

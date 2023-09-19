@@ -1,10 +1,9 @@
 resource "aws_instance" "bastion" {
   ami                         = "ami-0c76973fbe0ee100c" # Amazon Linux 2
-  instance_type               = "t2.micro"
-  vpc_security_group_ids      = [aws_security_group.bastion.id]
+  instance_type               = "t2.micro" 
+  vpc_security_group_ids      = [aws_security_group.bastion.id] # 보안 그룹 종속
   subnet_id = aws_subnet.pub_a.id
-  depends_on                  = [aws_nat_gateway.natgw]
-  key_name  = "test"
+  depends_on                  = [aws_nat_gateway.natgw] # NAT 구성 후 생성
   tags = {
     Name = "Bastion"
   }

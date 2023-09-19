@@ -1,19 +1,9 @@
-data "terraform_remote_state" "network" {
-	backend = "remote"
-	config = {
-		organization = "vvasco_test"
-		workspaces = {
-			name = "network"
-		}
-	}
-}
-
 resource "aws_instance" "bastion" {
   ami                         = "ami-0c76973fbe0ee100c" # Amazon Linux 2
   instance_type               = "t2.micro"
   vpc_security_group_ids      = [aws_security_group.bastion.id]
-  subnet_id = data.terraform_remote_state.vpc.outputs.subnet_public_a
-  depends_on                  = [data.terraform_remote_state.vpc.outputs.nat_gw]
+  subnet_id = data.terraform_remote_state.network.outputs.subnet_public_a
+  depends_on                  = [data.terraform_remote_state.network.outputs.nat_gw]
   tags = {
     Name = "Bastion"
   }
@@ -21,7 +11,7 @@ resource "aws_instance" "bastion" {
 resource "aws_security_group" "bastion" {
   name        = "Bastion-SG"
   description = "Allow SSH inbound traffic"
-  vpc_id      = data.terraform_remote_state.vpc.outputs.vpc_id
+  vpc_id      = data.terraform_remote_state.network.outputs.vpc_id
   ingress {
     description = "SSH from VPC"
     from_port   = 22

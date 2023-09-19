@@ -1,16 +1,9 @@
-data "aws_vpc" "existing_vpc" { #다른 워크스페이스에 있는 VPC 정보를 가져오기 위함
-  filter {
-    name   = "tag:Name"
-    values = ["TEST-VPC"] # 생성된 VPC 중 사용할 VPC 이름
-  }
-}
-
 resource "aws_instance" "bastion" {
   ami                         = "ami-0c76973fbe0ee100c" # Amazon Linux 2
   instance_type               = "t2.micro"
   vpc_security_group_ids      = [aws_security_group.bastion.id]
-  subnet_id = aws_subnet.pub_a.id
-  depends_on                  = [aws_nat_gateway.natgw]
+  subnet_id = data.terraform_remote_state.vpc.outputs.subnet_public_a
+  depends_on                  = [data.terraform_remote_state.vpc.outputs.nat_gw]
   tags = {
     Name = "Bastion"
   }
@@ -18,7 +11,7 @@ resource "aws_instance" "bastion" {
 resource "aws_security_group" "bastion" {
   name        = "Bastion-SG"
   description = "Allow SSH inbound traffic"
-  vpc_id      = data.aws_vpc.existing_vpc.id
+  vpc_id      = data.terraform_remote_state.vpc.outputs.vpc_id
   ingress {
     description = "SSH from VPC"
     from_port   = 22

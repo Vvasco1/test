@@ -1,4 +1,4 @@
-data "terraform_remote_state" "network" {
+data "terraform_remote_state" "network" { #참조할 tfc의 org, workspace 지정
 	backend = "remote"
 	config = {
 		organization = "vvasco_test"

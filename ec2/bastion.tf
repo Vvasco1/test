@@ -1,3 +1,13 @@
+data "terraform_remote_state" "network" {
+	backend = "remote"
+	config = {
+		organization = "vvasco_test"
+		workspace = {
+			name = "network"
+		}
+	}
+}
+
 resource "aws_instance" "bastion" {
   ami                         = "ami-0c76973fbe0ee100c" # Amazon Linux 2
   instance_type               = "t2.micro"

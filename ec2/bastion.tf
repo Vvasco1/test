@@ -13,7 +13,7 @@ resource "aws_instance" "bastion" {
   instance_type               = "t2.micro"
   vpc_security_group_ids      = [aws_security_group.bastion.id]
   subnet_id = data.terraform_remote_state.network.outputs.subnet_public_a
-  depends_on                  = [data.terraform_remote_state.network.outputs.nat_gw]
+  depends_on                  = [data.terraform_remote_state.network.network]
   tags = {
     Name = "Bastion"
   }

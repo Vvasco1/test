@@ -6,6 +6,6 @@ output "nat_gw" {
 	value = aws_nat_gateway.natgw
 }
 
-out "subnet_public_a" {
+output "subnet_public_a" {
 	value = aws_subnet.pub_a.id
 }
